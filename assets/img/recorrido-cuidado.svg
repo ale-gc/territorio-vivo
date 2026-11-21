@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 175">
+ <defs><linearGradient id="cielo" x2="0%" y2="100%"><stop stop-color="#e6d4ae"/><stop offset="1" stop-color="#f4e8cd"/></linearGradient></defs>
+ <rect width="480" height="175" fill="url(#cielo)"/>
+ <circle cx="338" cy="43" r="25" fill="#ecc17d"/>
+ <path d="M0 98 56 66 89 80 166 32 217 66 258 48 331 89 402 44 480 83v92H0Z" fill="#a9b39a"/>
+ <path d="m0 112 84-39 57 28 73-27 89 38 83-45 94 32v76H0Z" fill="#7f9984"/>
+ <path d="M0 122q94-45 204 0t276-24v77H0Z" fill="#567968"/>
+ <path d="M0 149q70-38 143-16t163 6q83-16 174 8v28H0Z" fill="#365b50"/>
+ <path d="M76 176q63-33 153-40t87-23q-5-7-34-9 68 1 58 16t-89 24q-57 7-95 32Z" fill="#ddbf88"/>
+ <g stroke="#4a5442" stroke-width="4" stroke-linejoin="round"><path d="m135 157 2-83"/><path d="m109 75 53 3 11 8-13 8-52-4Z" fill="#d4a166"/><path d="m120 99 40 3-1 14-40-3-10-9Z" fill="#ded0a7"/></g>
+ <g fill="#344e40"><path d="M400 133q-4-25 7-32 7 15-7 32m5 0q5-28 23-25-5 17-23 25M34 145q-16-20-12-32 15 6 12 32m4 0q2-20 12-25 2 13-12 25"/></g>
+</svg>
