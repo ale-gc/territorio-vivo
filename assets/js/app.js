@@ -71,13 +71,9 @@
       source.href='acerca.html#procedencia';reading.append(source);
       const action=node('button','Explorar con una actividad','play-primary');
       action.addEventListener('click',()=>{cerrarActividad(c.eje);});reading.append(action);
-      if(c.id==='calma'||c.id==='esperanza'){
-        const botanical=node('details','','botanical');const photo=node('img');photo.src='assets/img/manzanilla-tulumnes.jpg';photo.alt='Flor rotulada como Matricaria chamomilla por su autor, Tulumnes';photo.width=500;photo.height=513;photo.loading='lazy';
-        botanical.append(node('summary','Observar la flor'),photo,node('p','El autor identifica esta flor como manzanilla. La identificación botánica del relato sigue abierta.'),node('a','Fotografía: Tulumnes · CC BY-SA 4.0','text-link'));
-        botanical.lastChild.href='https://commons.wikimedia.org/wiki/File:Matricaria_chamomilla_flower.jpg';reading.append(botanical);
-      }
+
     } else if(key==='situacion') {
-      reading.append(node('p',c.situacion),node('p',c.pregunta,'reflection-prompt'),node('p','Escena imaginada para esta lectura.','source'));
+      reading.append(node('p',c.situacion),node('p',c.pregunta,'reflection-prompt'));
     } else {
       reading.append(node('p',c.cuidado));const link=node('a','Encontrar acompañamiento ↗','text-link');link.href='apoyo.html';
       reading.append(link);
@@ -132,7 +128,9 @@
       b.addEventListener('click',()=>openConcept(c.id,b));wrap.append(b);
     });
     $('#busqueda-apoyo').hidden=!matches.some(({concepto})=>concepto.id==='acompanamiento')||!query.trim();
-    $('#resultados').textContent=matches.length?`${matches.length} conceptos y experiencias disponibles`:'No hay coincidencias. Prueba con otra palabra.';
+    $('#sin-resultados').hidden=matches.length>0;
+    $('#ampliar-busqueda').textContent=category?'Quitar el filtro de tema':'Ver las veinte lecturas';
+    $('#resultados').textContent=matches.length ? (matches.length===1?'Una lectura para explorar':`${matches.length} lecturas para explorar`) : (category?'No hay coincidencias en este tema. Puedes consultar los demás.':'No hay coincidencias con esa frase. Puedes escribirla de otra manera o recorrer los temas.');
   }
   function setEje(id,scroll=false) {
     if(!['1','2','3','4'].includes(String(id)))id='1';
@@ -155,6 +153,14 @@
   for(const category of new Set(data.conceptos.map(c=>c.categoria))){
     const option=node('option',category);option.value=category;$('#categoria').append(option);
   }
+  $('#ampliar-busqueda').addEventListener('click',()=>{
+    if($('#categoria').value)$('#categoria').value='';
+    else $('#buscar').value='';
+    renderIndex($('#buscar').value);$('#buscar').focus({preventScroll:true});
+  });
+  $('#volver-paisaje').addEventListener('click',()=>{
+    const tab=document.querySelector('[data-mode="paisaje"]');tab.click();tab.focus({preventScroll:true});
+  });
   $('#categoria').addEventListener('change',()=>renderIndex($('#buscar').value));
   $('#reflexion').addEventListener('click',()=>{const open=$('#reflexion').getAttribute('aria-expanded')==='true';$('#reflexion').setAttribute('aria-expanded',String(!open));$('#reflexion-texto').hidden=open;$('#reflexion').textContent=open?'Abrir la reflexión':'Cerrar la reflexión';});
   let gesture=null;
@@ -201,11 +207,35 @@
     const ids=['preocupacion','rabia','firmeza','calma','esperanza','tristeza-perdida'];
     openConcept(ids[suggestion%ids.length],$('#recorrer'));suggestion++;
   });
-  const treeQuestions={raices:'Los vínculos pueden sostener: ¿a quién podríamos pedir compañía?',ramas:'Puede haber distintas opciones: ¿qué alternativas de cuidado caben en una situación?',copa:'Antes de responder, observa: ¿qué sabemos y qué estamos suponiendo?'};
-  all('[data-tree]').forEach(b=>b.addEventListener('click',()=>{
-    all('[data-tree]').forEach(t=>t.setAttribute('aria-pressed',String(t===b)));
-    $('.tree-workbench').dataset.part=b.dataset.tree;$('#tree-question').textContent=treeQuestions[b.dataset.tree];
-  }));
+  const treeParts={
+    raices:{question:'Primero, ¿qué podría sostener a tu amigo en un día difícil?',options:[
+      ['Ofrecerle compañía','Puede aceptar que te quedes aunque todavía le cueste hablar. Saber que alguien está cerca puede hacer más llevadero el día.'],
+      ['Ayudar con una tarea','Repartir una tarea le deja un rato para descansar. Preguntarle primero permite saber qué ayuda le sirve.']]},
+    ramas:{question:'Le gustaría hablar con alguien. ¿Cómo harías ese contacto?',options:[
+      ['Preguntarle con quién quiere hablar','Así elige una relación en la que siente confianza. Puedes ofrecerte a acompañarlo.'],
+      ['Invitarlo a caminar juntos','Compartir un rato puede abrir la conversación. También puede preferir caminar en silencio.']]},
+    copa:{question:'Mañana vuelven a trabajar juntos. ¿Qué acuerdo ayudaría a convivir?',options:[
+      ['Escucharse por turnos','Cada persona puede terminar lo que quiere decir. Así es más fácil entender qué pasó durante la discusión.'],
+      ['Repartir la tarea entre ambos','Saber qué hará cada uno evita que vuelva a quedar toda la carga de un solo lado.']]}
+  };
+  const treePlan=new Map();
+  function exploreTree(part){
+    const item=treeParts[part],choices=$('#tree-choices'),feedback=$('#tree-feedback');
+    $('.tree-workbench').dataset.part=part;
+    all('[data-tree]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tree===part)));
+    $('#tree-question').textContent=item.question;choices.replaceChildren();feedback.textContent=treePlan.get(part)?.answer||'';
+    item.options.forEach(([label,answer])=>{
+      const choice=node('button',label);choice.setAttribute('aria-pressed',String(treePlan.get(part)?.label===label));choices.append(choice);
+      choice.addEventListener('click',()=>{
+        [...choices.children].forEach(b=>b.setAttribute('aria-pressed',String(b===choice)));
+        feedback.textContent=answer;treePlan.set(part,{label,answer});
+        const plan=$('#tree-plan');plan.hidden=treePlan.size!==3;
+        if(!plan.hidden)plan.textContent='Para acompañar a tu amigo elegiste: '+['raices','ramas','copa'].map(key=>treePlan.get(key).label.toLowerCase()).join(' · ')+'. Puedes volver a una parte y cambiar el plan.';
+      });
+    });
+  }
+  all('[data-tree]').forEach(b=>b.addEventListener('click',()=>exploreTree(b.dataset.tree)));
+  exploreTree('raices');
 
   changeScene('bosque');renderIndex();updateMotion();setEje(new URL(location.href).searchParams.get('eje')||'1');
   openAnchor();

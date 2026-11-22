@@ -11,12 +11,12 @@
   const actions=el('div','','guide-actions');const next=el('button','Ver guía'),close=el('button','Cerrar');
   const label=el('label'),omit=el('input');omit.type='checkbox';label.append(omit,' No volver a mostrar');
   body.append(title,hint,actions,label);actions.append(next,close);box.append(jaguar,body);
-  const intro=document.querySelector('.explore-intro,.entry-invitation')||header;
+  const intro=document.querySelector('.explore-intro,.entry-invitation')||document.querySelector('.site-bar')||header;
   intro.after(box);let step=-1,marked=null,returnY=0;
   const touch=window.matchMedia('(pointer:coarse)').matches,verb=touch?'Toca':'Selecciona';
   const learning=!!document.querySelector('#hotspots');
   const steps=learning?[
-    ['[data-mode="paisaje"]','Recorrer los ejes',verb+' Recorrer los ejes para elegir entre emociones, cuidado, apoyo y sustancias.'],
+    ['[data-mode="paisaje"]','Recorrer los ejes',verb+' Recorrer los ejes para elegir entre Reconocer, Cuidar, Acompañamiento y Sustancias.'],
     ['[data-mode="buscar"]','Buscar un tema','Puedes escribir una palabra o una frase, como «quiero hablar con alguien».'],
     ['.landmark','Leer a tu ritmo',touch?'Toca una lámina para abrirla. Cambia de paisaje con los botones o deslizando sobre la fotografía.':'Abre las láminas con clic o con Tab y Enter. Escape cierra la lectura.'],
     ['.app-nav a[href="apoyo.html"]','Encontrar apoyo','Apoyo abre las opciones de acompañamiento desde cualquier página.']

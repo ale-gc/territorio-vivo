@@ -33,17 +33,19 @@
    prompt.setAttribute('aria-live','polite');
    const guideSteps={
      1:[['.phrase','Elige una frase.'],['.drop-zone>button','Ahora elige dónde la pondrías. Puedes cambiarla después.']],
-     2:[['.move-down','Baja la primera pieza para cambiar el comienzo.'],['.play-primary','Recorre tu secuencia para ver qué cambia.']],
-     3:[['.story-choice','Elige qué dirías primero.'],['.story-choice','La otra persona respondió. Elige cómo seguir.']],
+     2:[['.sequence-piece:nth-of-type(2) .sequence-handle','Toca este paso para colocarlo al comienzo.'],['.play-primary','Lee lo que cambia con tu nuevo orden.']],
+     3:[['.story-choice','Elige qué dirías. Arriba quedará lo que elegiste y debajo verás qué ocurrió.'],['.story-choice','Elige cómo seguir. Al final puedes volver atrás.']],
      4:[['input[type=range]','Mueve la lupa hacia otra parte del mensaje.'],['.case-actions .story-choice','Elige qué harías con lo que descubriste.']]
    }[axis];
-   let guideStep=0;
+   let guideStep=guideSteps.length;
    function point(scroll=false){
      box.querySelectorAll('.play-target').forEach(n=>n.classList.remove('play-target'));
-     const step=guideSteps[guideStep],target=step&&box.querySelector(step[0]);
+     const step=guideSteps[guideStep];
+     const fallback=step && axis===3 && !board.querySelector('.story-choice');
+     const target=step&&(fallback?controls.querySelector('.story-back'):box.querySelector(step[0]));
      walk.hidden=!target;
      if(!target)return;
-     prompt.textContent=step[1];target.classList.add('play-target');
+     prompt.textContent=fallback?'Ya viste este desenlace. Vuelve una decisión para explorar qué pasaría al responder de otra manera.':step[1];target.classList.add('play-target');
      const row=target.closest('.sequence-piece,.drop-zone')||target;
      row.before(walk);
      if(scroll)walk.scrollIntoView({block:'center',behavior:'instant'});
@@ -52,16 +54,30 @@
    walk.append(cat,prompt,button('Omitir',()=>{guideStep=guideSteps.length;point();}));
    box.addEventListener('click',event=>{
      const step=guideSteps[guideStep];
-     if(step&&event.target.closest(step[0])){guideStep++;queueMicrotask(()=>point());}
+     if(step&&(event.target.closest(step[0])||event.target.closest('.play-target'))){guideStep++;queueMicrotask(()=>point());}
    },true);
    box.addEventListener('input',event=>{if(axis===4&&guideStep===0&&event.target.type==='range'){guideStep++;point();}});
-   box.append(name,label,picker,lead,replay,el('p',instruction,'play-instruction'),board,state,controls,note);
+   const instructionLine=el('p',instruction,'play-instruction');
+   const library=el('details','','case-library'),libraryTitle=el('summary');
+   const chooseTitle=axis===3?'Elegir una historia':'Cambiar de mensaje';
+   libraryTitle.textContent=chooseTitle;library.append(libraryTitle);
+   function selectCase(i){
+     start(i);library.open=false;replay.hidden=false;instructionLine.hidden=false;board.hidden=false;controls.hidden=false;lead.hidden=false;
+     narrative.tabIndex=-1;narrative.focus({preventScroll:true});
+   }
+   cases.forEach((c,i)=>{const b=button(c.nombre,()=>selectCase(i));b.dataset.caseIndex=String(i);library.append(b);});
+   box.append(name);
+   if(axis<=2)box.append(label,picker);else box.append(library);
+   box.append(lead,instructionLine,replay,board,state,controls,note);if(axis===2){const options=el('details','','sequence-options');options.append(el('summary','Cambiar de situación'),label,picker);box.insertBefore(options,note);}
    const anchor=$('[data-activity="'+axis+'"]');anchor.before(box);
    const old=el('details','','previous-reading');old.append(el('summary','Explorar otras perspectivas'));anchor.replaceWith(old);old.append(anchor);
    function start(i){const c=cases[i];picture.src='assets/img/estudios/'+c.arte+'.webp';narrative.textContent=c.escena;
-     board.replaceChildren();board.removeAttribute('data-connected');controls.replaceChildren();state.textContent='';
-     render({box,board,state,controls},c);guideStep=0;point();}
-   picker.addEventListener('change',()=>start(Number(picker.value)));start(0);
+     board.replaceChildren();board.after(state);board.removeAttribute('data-connected');controls.replaceChildren();state.textContent='';
+     box.dataset.caseIndex=String(i);libraryTitle.textContent=chooseTitle+' · '+c.nombre;render({box,board,state,controls},c);guideStep=guideSteps.length;point();}
+   picker.addEventListener('change',()=>start(Number(picker.value)));
+   if(axis===3){
+     library.open=true;lead.hidden=instructionLine.hidden=replay.hidden=board.hidden=controls.hidden=true;
+   }else start(0);
  }
  // Puntero y alternativa de dos toques: ningún contenido depende de arrastrar.
  function draggable(item,onDrop){
@@ -76,45 +92,58 @@
   item.addEventListener('pointerup',finish);item.addEventListener('pointercancel',()=>{ghost?.remove();ghost=null;start=null;});
  }
  // 1. Clasificación manipulable: comparar una lectura posible, no puntuar.
- activity(1,'Desarma una discusión','Elige una frase y luego Sentir, Pensar o Actuar. También puedes arrastrarla y cambiarla de lugar.',({board,state,controls},c)=>{
-  const phrases=c.piezas;let selected=null,places={};const tray=el('div','','phrase-tray'),zones=el('div','','drop-zones');board.append(tray,zones);
-  function move(id,zone){if(!['sentir','pensar','actuar'].includes(zone))return;places[id]=zone;selected=null;draw();board.querySelector(`[data-piece="${id}"]`).focus({preventScroll:true});const piece=phrases.find(p=>p[0]===id);const lenses={sentir:'Si la miras desde el sentir, ¿qué vivencia sugiere?',pensar:'Si la miras desde el pensar, ¿hay una idea que la acompaña?',actuar:'Mirarla como acción invita a preguntar qué se podría observar.'};state.textContent=(piece[2]===zone?'':lenses[zone]+' ')+piece[3];}
-  function draw(){tray.replaceChildren();zones.replaceChildren();zones.removeAttribute('data-compared');
+ activity(1,'Desarma una discusión','Lee la frase marcada. Toca Sentir, Pensar o Actuar para colocarla. Puedes escoger otra frase o moverla después.',({board,state,controls},c)=>{
+  const phrases=c.piezas;let selected=phrases[0][0],places={};const tray=el('div','','phrase-tray'),zones=el('div','','drop-zones');board.append(tray,zones);
+  function move(id,zone){if(!['sentir','pensar','actuar'].includes(zone))return;places[id]=zone;selected=phrases.find(p=>!places[p[0]])?.[0];draw();board.querySelector(`[data-piece="${id}"]`).focus({preventScroll:true});const piece=phrases.find(p=>p[0]===id);const labels={sentir:'Sentir',pensar:'Pensar',actuar:'Actuar'};
+    const moved=board.querySelector('[data-piece="'+id+'"]');
+    moved.after(state);
+    state.textContent=(piece[2]===zone?'Encaja en '+labels[zone]+'. ':'La pusiste en '+labels[zone]+'. En esta escena encaja mejor en '+labels[piece[2]]+'. ')+piece[3]+(selected?' Sigue con '+phrases.find(p=>p[0]===selected)[1]+'.':'');}
+  function draw(){board.after(state);tray.replaceChildren();zones.replaceChildren();zones.removeAttribute('data-compared');
    const containers={};for(const [id,label]of [['sentir','Sentir'],['pensar','Pensar'],['actuar','Actuar']]){const z=el('div','','drop-zone');z.dataset.drop=id;z.append(button(label,()=>{if(selected)move(selected,id);else state.textContent='Primero elige una frase de la escena.';}));zones.append(z);containers[id]=z;}
-   for(const [id,text]of phrases){const b=button(text,()=>{selected=id;all('[data-piece]').forEach(t=>t.setAttribute('aria-pressed',String(t.dataset.piece===id)));state.textContent='Ahora elige Sentir, Pensar o Actuar.';},'phrase');b.dataset.piece=id;b.setAttribute('aria-pressed','false');draggable(b,zone=>move(id,zone));(containers[places[id]]||tray).append(b);}
+   for(const [id,text,lens]of phrases){const b=button(text,()=>{selected=id;tray.after(state);all('[data-piece]').forEach(t=>t.setAttribute('aria-pressed',String(t.dataset.piece===id)));state.textContent='Ahora elige Sentir, Pensar o Actuar.';},'phrase');if(places[id] && places[id]!==lens)b.append(el('small','En esta escena encaja en '+lens+'.','piece-hint'));b.dataset.piece=id;b.setAttribute('aria-pressed',String(id===selected));draggable(b,zone=>move(id,zone));(containers[places[id]]||tray).append(b);}
   }
   controls.append(button('Comparar una lectura posible',()=>{
-   if(Object.keys(places).length<phrases.length){state.textContent='Ubica las cuatro frases para observar sus relaciones. No hay una nota ni un resultado personal.';return;}
+   board.after(state);if(Object.keys(places).length<phrases.length){state.textContent='Todavía quedan frases en la mesa. Ubícalas para comparar lo que sintió, lo que pensó y lo que hizo.';return;}
    const different=phrases.find(([id,,lens])=>places[id]!==lens);
    state.textContent='Una lectura posible. '+c.cierre+(different?' Mira de nuevo «'+different[1].replace(/[«»]/g,'')+'». '+different[3]:' Puedes mover una frase para ver qué cambia al leerla desde otro lugar.');
    zones.dataset.compared='true';
-  },'play-primary'),button('Vaciar la mesa',()=>{selected=null;places={};draw();state.textContent='Mesa vacía. Puedes probar otra distribución.';}));
+  },'play-primary'),button('Vaciar la mesa',()=>{selected=phrases[0][0];places={};draw();state.textContent='Mesa vacía. Puedes probar otra distribución.';}));
   draw();
  });
- activity(2,'Construye una conversación','Mueve las piezas con Subir y Bajar o arrástralas. Recorre el orden elegido y compáralo con otro.',({board,state,controls},c)=>{
+ activity(2,'Construye una conversación','¿Por dónde empezarías? Toca un paso para ponerlo primero. Con Subir y Bajar puedes ajustar el resto.',({board,state,controls},c)=>{
   const ids=['observar','escuchar','acordar'];let order=['acordar','observar','escuchar'];const names=Object.fromEntries(ids.map((id,i)=>[id,c.pasos[i]]));
-  function move(id,to){const from=order.indexOf(id),target=typeof to==='number'?to:order.indexOf(to);if(target<0||target>=order.length||from===target)return;order.splice(from,1);order.splice(target,0,id);board.removeAttribute('data-connected');draw();state.textContent='Recorrido reorganizado. Puedes explorar otro orden.';}
-  function draw(){board.replaceChildren();order.forEach((id,i)=>{const row=el('div','','sequence-piece');row.dataset.drop=id;const handle=button(`${i+1}. ${names[id]}`,()=>{state.textContent='Usa Subir o Bajar para cambiar su posición.';},'sequence-handle');draggable(handle,to=>move(id,to));row.append(handle,button('Subir',()=>{move(id,i-1);board.querySelectorAll('.sequence-piece')[Math.max(0,i-1)].querySelector('button').focus({preventScroll:true});}),button('Bajar',()=>{move(id,i+1);board.querySelectorAll('.sequence-piece')[Math.min(2,i+1)].querySelector('button').focus({preventScroll:true});}));row.children[1].disabled=i===0;row.children[2].classList.add('move-down');row.children[2].disabled=i===2;board.append(row);});}
-  controls.append(button('Recorrer mi secuencia',()=>{board.dataset.connected='true';state.textContent=c.efecto[ids.indexOf(order[0])]+' '+c.final[ids.indexOf(order[2])];},'play-primary'),button('Reiniciar piezas',()=>{order=['acordar','observar','escuchar'];board.removeAttribute('data-connected');draw();state.textContent='Prueba otra organización.';}));
+  function move(id,to){const from=order.indexOf(id),target=typeof to==='number'?to:order.indexOf(to);if(target<0||target>=order.length||from===target)return;order.splice(from,1);order.splice(target,0,id);board.removeAttribute('data-connected');draw();board.querySelector('[data-drop="'+id+'"]').after(state);describeOrder();}
+  function describeOrder(){state.textContent=c.efecto[ids.indexOf(order[0])]+' '+c.final[ids.indexOf(order[2])];}
+  function draw(){board.after(state);board.replaceChildren();order.forEach((id,i)=>{const row=el('div','','sequence-piece');row.dataset.drop=id;const handle=button(`${i+1}. ${names[id]}`,()=>{if(i>0){move(id,0);board.querySelector('.sequence-handle').focus({preventScroll:true});}else{row.after(state);describeOrder();}},'sequence-handle');draggable(handle,to=>move(id,to));row.append(handle,button('Subir',()=>{move(id,i-1);board.querySelectorAll('.sequence-piece')[Math.max(0,i-1)].querySelector('button').focus({preventScroll:true});}),button('Bajar',()=>{move(id,i+1);board.querySelectorAll('.sequence-piece')[Math.min(2,i+1)].querySelector('button').focus({preventScroll:true});}));row.children[1].disabled=i===0;row.children[2].classList.add('move-down');row.children[2].disabled=i===2;board.append(row);});}
+  controls.append(button('Recorrer mi secuencia',()=>{board.dataset.connected='true';controls.after(state);describeOrder();},'play-primary'),button('Reiniciar piezas',()=>{order=['acordar','observar','escuchar'];board.removeAttribute('data-connected');draw();state.textContent='Prueba otra organización.';}));
   draw();
  });
  activity(3,'Un mensaje, varios caminos','Elige cómo abrir la conversación. Puedes volver una decisión y descubrir qué cambia.',({box,board,state,controls},c)=>{
-  const story={inicio:{text:c.inicio,choices:[[c.izq,'escucha'],[c.der,'red']]},escucha:{text:c.a,choices:[[c.acciones[0],'compania'],[c.acciones[1],'eleccion']]},red:{text:c.b,choices:[[c.acciones[2],'confianza'],[c.acciones[3],'salud']]}};
+  const story={inicio:{text:c.inicio,choices:[[c.izq,'escucha'],[c.der,'red'],[c.otro[0],'tropiezo']]},escucha:{text:c.a,feedback:c.miradas[0],choices:[[c.acciones[0],'compania'],[c.acciones[1],'eleccion']]},red:{text:c.b,feedback:c.miradas[1],choices:[[c.acciones[2],'confianza'],[c.acciones[3],'salud']]}};
+  story.tropiezo={text:c.otro[1],choices:[[c.otro[2],'reparar']]};
+  story.reparar={text:c.otro[3],end:true};
   ['compania','eleccion','confianza','salud'].forEach((id,i)=>story[id]={text:c.cierres[i],end:true});
   let lastEnding=null;let history=['inicio'];board.setAttribute('aria-live','polite');
-  function draw(){const id=history.at(-1),s=story[id];if(controls.firstElementChild)controls.firstElementChild.disabled=history.length<2;board.replaceChildren();board.append(el('p',s.text,'story-text'));for(const [label,to]of s.choices||[])board.append(button(label,()=>{history.push(to);draw();board.querySelector('.story-text').setAttribute('tabindex','-1');board.querySelector('.story-text').focus({preventScroll:true});},'story-choice'));if(s.end){if(lastEnding&&lastEnding!==id){const comparison=el('details','','path-comparison');comparison.open=true;comparison.append(el('summary','El otro camino que probaste'),el('p',story[lastEnding].text));board.append(comparison);}lastEnding=id;board.append(el('p','Puedes volver una decisión y comparar qué ayuda se hizo posible.','story-ending'));const link=el('a','Ver recursos de apoyo ↗','text-link');link.href='apoyo.html';board.append(link);}box.dataset.branch=id;}
-  controls.append(button('Volver una decisión',()=>{if(history.length>1)history.pop();draw();state.textContent='Puedes explorar otra respuesta.';}),button('Empezar otra historia',()=>{history=['inicio'];draw();state.textContent='Elige otro camino para comparar perspectivas.';}));draw();
+  function draw(){state.textContent='';const id=history.at(-1),s=story[id];const back=controls.querySelector('.story-back');if(back)back.disabled=history.length<2;board.replaceChildren();if(history.length>1){const previous=story[history.at(-2)].choices.find(choice=>choice[1]===id);board.append(el('p',previous[0],'story-sent'));}board.append(el('p',s.text,'story-text'));if(s.feedback)board.append(el('p',s.feedback,'story-reflection'));for(const [label,to]of s.choices||[])board.append(button(label,()=>{history.push(to);draw();board.querySelector('.story-text').setAttribute('tabindex','-1');board.querySelector('.story-text').focus({preventScroll:true});},'story-choice'));if(s.end){if(lastEnding&&lastEnding!==id){const comparison=el('details','','path-comparison');comparison.open=true;comparison.append(el('summary','El otro camino que probaste'),el('p',story[lastEnding].text));board.append(comparison);}lastEnding=id;board.append(el('p','Puedes volver una decisión y comparar qué ayuda se hizo posible.','story-ending'));const link=el('a','Ver recursos de apoyo ↗','text-link');link.href='apoyo.html';board.append(link,button('Elegir otra historia',()=>{const menu=box.querySelector('.case-library');menu.open=true;menu.querySelector('button').focus();},'text-link'));}box.dataset.branch=id;}
+  controls.append(button('Volver una decisión',()=>{if(history.length>1)history.pop();draw();state.textContent='Volviste al momento anterior de la conversación.';},'story-back'),button('Repetir esta historia',()=>{history=['inicio'];draw();state.textContent='La conversación vuelve a su comienzo.';const text=board.querySelector('.story-text');text.tabIndex=-1;text.focus();}));draw();
  });
- activity(4,'La lupa del contexto','Mueve la lupa o usa las flechas en el deslizador. Luego elige qué harías con lo que averiguaste.',({board,state,controls},c)=>{
-  const poster=el('div','','context-poster');const words=c.zonas;words.forEach((w,i)=>{const z=el('span',w,'poster-zone');z.dataset.zone=i;poster.append(z);});
+ activity(4,'La lupa del contexto','Toca una parte del mensaje para ver su pista. Después decide qué harías. También puedes mover la lupa.',({board,state,controls},c)=>{
+  const poster=el('div','','context-poster');const words=c.zonas;words.forEach((w,i)=>{const z=button(w,()=>reveal([0,50,100][i]),'poster-zone');z.dataset.zone=i;poster.append(z);});
   const lens=el('span','','context-lens');lens.setAttribute('aria-hidden','true');poster.append(lens);
   const label=el('label','Posición de la lupa');label.htmlFor='lupa-posicion';const range=el('input');range.id='lupa-posicion';range.type='range';range.min='0';range.max='100';range.value='0';range.setAttribute('aria-describedby','lupa-desc');
-  const desc=el('p','La posición permite descubrir tres aspectos del mensaje.');desc.id='lupa-desc';const seen=new Set();
+  const desc=el('p','La lupa muestra una pista en cada una de las tres partes del mensaje.');desc.id='lupa-desc';const seen=new Set();
   const explanations=c.lecturas;
-  function reveal(value){const v=Math.max(0,Math.min(100,Number(value)));range.value=String(v);range.setAttribute('aria-valuetext',words[Math.min(2,Math.floor(v/34))]);poster.style.setProperty('--lens',`${10+v*.8}%`);const zone=Math.min(2,Math.floor(v/34));seen.add(zone);poster.querySelectorAll('.poster-zone').forEach((z,i)=>z.dataset.revealed=String(seen.has(i)));state.textContent=explanations[zone]+(seen.size===3?' Ya puedes comparar lo que dice el mensaje con lo que falta por saber.':'');}
+  function reveal(value){const v=Math.max(0,Math.min(100,Number(value)));range.value=String(v);range.setAttribute('aria-valuetext',words[Math.min(2,Math.floor(v/34))]);poster.style.setProperty('--lens',`${10+v*.8}%`);const zone=Math.min(2,Math.floor(v/34));seen.add(zone);poster.querySelectorAll('.poster-zone').forEach((z,i)=>{z.dataset.revealed=String(seen.has(i));z.dataset.current=String(i===zone);z.setAttribute('aria-pressed',String(i===zone));});controls.querySelectorAll('.story-choice').forEach(b=>b.setAttribute('aria-pressed','false'));desc.after(state);state.textContent=words[zone]+'. '+explanations[zone]+(seen.size===3?' Puedes comparar las pistas y decidir qué harías.':'');}
   range.addEventListener('input',()=>reveal(range.value));
   let dragging=false;function point(e){const rect=poster.getBoundingClientRect();if(rect.width)reveal((e.clientX-rect.left)/rect.width*100);}
-  poster.addEventListener('pointerdown',e=>{dragging=true;poster.setPointerCapture?.(e.pointerId);point(e);});poster.addEventListener('pointermove',e=>{if(dragging)point(e);});poster.addEventListener('pointerup',()=>{dragging=false;});poster.addEventListener('pointercancel',()=>{dragging=false;});
-  board.append(poster,label,range,desc);c.respuesta.forEach((label,i)=>controls.append(button(label,()=>{const unseen=words.find((word,j)=>!seen.has(j));state.textContent=c.fin[i]+(unseen?' Aún puedes mirar «'+unseen+'» en el mensaje.':'');},'story-choice')));controls.append(button('Volver a observar',()=>{seen.clear();reveal(0);}));reveal(0);
+  poster.addEventListener('pointerdown',e=>{dragging=true;if(!e.target.closest('button'))poster.setPointerCapture?.(e.pointerId);point(e);});poster.addEventListener('pointermove',e=>{if(dragging)point(e);});poster.addEventListener('pointerup',()=>{dragging=false;});poster.addEventListener('pointercancel',()=>{dragging=false;});
+  board.append(poster,label,range,desc);
+  const actions=c.respuesta.map((label,i)=>button(label,event=>{
+    actions.forEach(b=>b.setAttribute('aria-pressed',String(b===event.currentTarget)));
+    event.currentTarget.after(state);
+    state.textContent=c.fin[i];
+  },'story-choice'));
+  controls.append(...actions,button('Volver a observar',()=>{seen.clear();reveal(0);}));
+  reveal(0);
  });
 })();

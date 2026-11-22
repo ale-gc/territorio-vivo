@@ -78,3 +78,49 @@ button,a,input,select,summary{touch-action:manipulation}
 .game-walk img{width:58px;height:42px;object-fit:cover;mix-blend-mode:multiply}.game-walk p{flex:1;font-size:14px;line-height:1.35}.game-walk button{color:#3b5039;text-decoration:underline}.play-target{outline:3px solid #aa641b;outline-offset:2px}
 .territorial-reading{padding:20px 0}.territorial-reading summary,.provenance summary{min-height:44px;cursor:pointer;padding:12px 0}.territorial-reading details{border-bottom:1px solid #b5b49c}.territorial-reading p,.provenance p{line-height:1.6}.provenance{margin:28px auto;max-width:760px;scroll-margin-top:82px}.provenance h2{font:500 27px Georgia,serif}
 .guide-leader{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:321}.field-guide.guiding{z-index:322}
+
+.site-bar{position:sticky;top:0;z-index:300;background:#e9dfcc}.site-bar .app-header{position:static}
+.hdr-txt{min-width:0}.hdr-txt p{white-space:normal}.reading-toolbar{display:flex;justify-content:flex-end;position:sticky;top:0;z-index:4;background:#efe4ce;padding:3px 0}
+:is(#lectura-catalogo,.territorio,.conceptos-index) .reading-toolbar .pd-cierre{position:static;float:none;margin:0;width:auto;height:44px;padding:0 13px;font-size:14px}
+.panel-detalle,.pd-cuerpo{cursor:default;caret-color:transparent}.search-fields input{caret-color:auto}
+@media(min-width:900px){
+ .site-bar{display:grid;grid-template-columns:34px minmax(145px,1fr) minmax(335px,1.5fr) minmax(112px,.65fr);align-items:center;gap:12px;padding:8px max(22px,calc((100% - 1200px)/2));border-bottom:1px solid var(--line)}
+ .site-bar .app-header{display:contents}.site-bar .hdr-marca{grid-column:1;grid-row:1}.site-bar .hdr-txt{grid-column:2;grid-row:1}.site-bar .help-launch{grid-column:4;grid-row:1}
+ .site-bar .app-nav{position:static;grid-column:3;grid-row:1;transform:none;width:100%;height:auto}.site-bar .nav-item{min-width:0}
+}
+@media(max-height:510px) and (max-width:899px){.site-bar{position:static}}
+
+.playground .play-feedback,.story-reflection{margin:12px 0;padding:10px 14px;min-height:0;background:#e5e7d2;border-inline-start:3px solid #657b51;border-radius:0 8px 8px 0;color:#243e30;line-height:1.55}
+.playground .play-feedback:empty{display:none}
+.poster-zone[data-current=true]{box-shadow:inset 0 -5px #ffe0a4;text-decoration:underline;text-underline-offset:4px}
+#sin-resultados button{margin-inline-end:18px}
+
+.piece-hint{display:block;margin-top:4px;font-size:.875rem;color:#4c513a}
+.case-actions .story-choice[aria-pressed=true]{border:2px solid #3b583e;background:#dde3ca;font-weight:600}
+
+.tree-workbench svg{width:min(60%,260px);height:auto}.tree-workbench[data-part=raices] .tree-roots,.tree-workbench[data-part=ramas] .tree-branches{stroke:#803817}.tree-workbench[data-part=copa] .tree-crown{fill:#436842}
+#tree-question{min-height:0;font-weight:600}#tree-choices,.case-library[open]{display:flex;flex-wrap:wrap;gap:8px}
+#tree-choices button,.case-library button{border:1px solid #798a6c;border-radius:14px;padding:8px 12px;min-height:44px;color:#254034;text-align:start}
+#tree-choices [aria-pressed=true]{background:#344f3b;color:#fff6e4}#tree-feedback:empty{display:none}
+.case-library summary{width:100%;cursor:pointer;min-height:44px;padding-block:10px}.playground [hidden]{display:none!important}
+[data-experience="3"] .case-lead img,[data-experience="4"] .case-lead img{display:none}
+[data-experience="3"] .case-lead,[data-experience="4"] .case-lead{display:block}
+.story-sent{width:fit-content;margin-inline-start:auto;padding:10px 16px;background:#374f40;color:#fff6df;border-radius:14px 14px 2px 14px}
+[data-experience="3"] .story-text{background:#f5eedc;border-radius:2px 14px 14px;padding:14px}
+.substance-shelf{margin-block:28px}.substance-shelf details{border-block-end:1px solid #b4ac94;padding-block:4px}.substance-shelf summary{cursor:pointer;display:flex;align-items:center;gap:12px;padding:8px}.substance-shelf summary:after{content:'+';margin-inline-start:auto}.substance-shelf details[open] summary:after{content:'−'}.substance-shelf small,.substance-shelf strong{display:block}.substance-shelf summary svg{background:#dfe3c9;border-radius:12px;color:#365543}.substance-shelf details p{margin:8px 6px;max-width:65ch}
+
+.play-board>a.text-link,.play-board>button.text-link{display:block;width:fit-content}
+.sequence-options summary{cursor:pointer;min-height:44px;padding-block:12px}
+#tree-plan{padding:12px;border-top:1px solid #9ba886}
+
+/* El eje largo conserva su nombre completo incluso en teléfonos estrechos. */
+@media(max-width:620px){.ejes-nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.ejes-nav button{flex-direction:row;gap:8px}}
+.substance-shelf summary>img{width:clamp(74px,14vw,108px);height:auto;aspect-ratio:1;object-fit:cover;border-radius:18px 6px 18px 6px}
+.sendero{border-block:1px solid #a3a88c;padding:24px 0;margin:28px 0;color:#243e31}.sendero h3{font:500 clamp(28px,4vw,42px)/1.1 Georgia,serif}.sendero>p{margin:10px 0 16px;max-width:62ch}
+.walk-stage{height:clamp(220px,43vw,340px);position:relative;overflow:hidden;border-radius:25px 50px 15px 15px;isolation:isolate;background:#9faa83 url('../img/estudios/sendero.webp') center 62%/cover}
+.walk-stage:before{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#56452340,transparent 40%);pointer-events:none}.walk-stage.late:before{background:linear-gradient(135deg,#efb17355,#69492c38)}
+.walk-time{position:absolute;top:12px;left:12px;background:#fcf2d9;color:#314835;border-radius:30px;padding:5px 14px;font-weight:600}
+.walk-player,.walk-friend{position:absolute;width:clamp(38px,6vw,61px);transform:translateX(-50%);transition:left .24s ease-out,bottom .24s ease-out;line-height:0}.walk-player{z-index:2}.walk-friend{--shirt:#506a57;transform:translateX(-50%) scaleX(-1)}.walk-stage svg{width:100%;height:auto}
+.walk-tools,#walk-choices{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sendero button{min-height:44px;padding:8px 14px;border-radius:14px;border:1px solid #859175;color:#274234;background:#efe4cb}.sendero button[data-step]{font-size:21px;min-width:46px}.sendero button:disabled{opacity:.48}
+#walk-music[aria-pressed=true],#walk-choices button{background:#365640;color:#fff3da}.walk-dialog{margin:15px 0 0;padding:12px 14px;border-inline-start:3px solid #778659;max-width:64ch;background:#e4e3cf}
+@media(prefers-reduced-motion:reduce){.walk-player,.walk-friend{transition:none}}

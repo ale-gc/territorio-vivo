@@ -1,4 +1,4 @@
-/* Escenarios ficticios de exploración. Fuentes por eje en Aprender. */
+/* Escenas ficticias del equipo. Fuentes en Acerca. */
 window.CasosEducativos = {
   "1": [
     {
@@ -31,7 +31,7 @@ window.CasosEducativos = {
           "Pedir información abre una salida distinta a la discusión."
         ]
       ],
-      "cierre": "La rabia y el insulto ocupan momentos diferentes. Reconocer el primero deja lugar para elegir el segundo paso."
+      "cierre": "La rabia es lo que sintió. Insultar fue una acción. Podía expresar el enojo de otra manera, por ejemplo, pidiendo que parara la burla."
     },
     {
       "nombre": "Esperar una respuesta",
@@ -117,6 +117,11 @@ window.CasosEducativos = {
         "Al terminar comprobando qué falta, aún conviene confirmar quién lo hará.",
         "Escuchar al final puede revelar que el reparto necesita un ajuste.",
         "Cerrar con el reparto concreta lo que ambas personas ya pudieron aportar."
+      ],
+      "puente": [
+        "Mirar qué falta a mitad de la charla permite ajustar el reparto antes de terminar.",
+        "Ahora pueden comprobar si el plan tiene en cuenta la dificultad que apareció.",
+        "Repartir la tarea en este momento deja un último paso para revisar el plan."
       ]
     },
     {
@@ -137,6 +142,11 @@ window.CasosEducativos = {
         "Si la frase quedó para el final, puede hacer falta otra conversación para escuchar su efecto.",
         "La respuesta sobre el tiempo permite ajustar lo que habían decidido.",
         "Al cerrar con una hora concreta resulta más fácil volver al tema."
+      ],
+      "puente": [
+        "Nombrar ahora la frase ayuda a que ambos sepan qué conversación queda pendiente.",
+        "Preguntar cuánto tiempo queda permite decidir si hablar ahora o más tarde.",
+        "Fijar una hora deja espacio para aclarar qué quieren conversar cuando se vean."
       ]
     },
     {
@@ -157,6 +167,11 @@ window.CasosEducativos = {
         "Revisar el espacio al final deja comprobar si el turno cabe en la práctica.",
         "Escuchar al final permite descubrir a quién le resulta difícil el plan.",
         "Cerrar con un turno deja un acuerdo concreto para probar esa tarde."
+      ],
+      "puente": [
+        "Revisar la mesa ahora permite comprobar si lo que imaginaron cabe de verdad.",
+        "Escuchar los horarios a mitad de camino permite ajustar el turno.",
+        "Probar el turno en este momento deja tiempo para cambiarlo si a alguien le cuesta trabajar."
       ]
     }
   ],
@@ -179,8 +194,18 @@ window.CasosEducativos = {
       "cierres": [
         "Acuerdan caminar un rato. La compañía deja espacio para hablar otro día.",
         "Prefiere que le escribas mañana. Preguntar le devolvió la elección del momento.",
-        "Elige a una persona con quien se siente segura y decide qué contarle.",
-        "Quiere consultar en salud y te pide que la acompañes hasta la entrada."
+        "Elige a alguien en quien confía. Preguntarle antes de contarle a otra persona le permite cuidar su privacidad.",
+        "Te pide que la acompañes hasta la entrada del centro de salud. Ir juntos le facilita llegar, y ella puede decidir qué contar dentro."
+      ],
+      "miradas": [
+        "Al ofrecerte a escuchar, tu amistad puede elegir cuánto quiere contar.",
+        "Ofrecer ayuda abrió una pregunta importante para ella: quién sabrá lo que pasa."
+      ],
+      "otro": [
+        "Insistir en que lo cuente ahora",
+        "«Ya te dije que hoy no quiero contarlo». Insistir puede hacerle sentir presión y cerrar la conversación.",
+        "Decir que puedes quedarte sin pedir detalles",
+        "Acepta sentarse contigo. Reconociste su límite y dejaste que decidiera cuándo hablar."
       ]
     },
     {
@@ -201,8 +226,18 @@ window.CasosEducativos = {
       "cierres": [
         "Se sientan en silencio. Respetar ese límite hace más fácil aceptar compañía.",
         "Escoge un día tranquilo. Un plan pequeño puede sostener el vínculo.",
-        "Acepta la comida. Resolver algo concreto aligera una parte del día.",
+        "Acepta la comida. Hoy esa ayuda le permite descansar un rato sin tener que explicar cómo se siente.",
         "Propone hablar con una tía. La persona conserva la decisión de a quién acercarse."
+      ],
+      "miradas": [
+        "Al preguntar primero, te enteraste de que quiere compañía aunque prefiera el silencio.",
+        "Una oferta concreta le permitió decir qué parte del día le cuesta más."
+      ],
+      "otro": [
+        "Contárselo a otras personas por su cuenta",
+        "Se entera y te pregunta por qué hablaste sin consultarle. Querer ayudar también implica cuidar su privacidad.",
+        "Preguntar antes de involucrar a alguien más",
+        "Elige con quién compartirlo y qué quiere decir. Ahora la ayuda respeta esa decisión."
       ]
     },
     {
@@ -225,6 +260,16 @@ window.CasosEducativos = {
         "Agradece decidir quién entra. El apoyo también puede darse desde la sala de espera.",
         "Consultan directamente con el servicio. Saber cuándo recibe ayuda a organizar la visita.",
         "Acuerdan un camino y una hora. La ayuda práctica puede hacer más accesible pedir orientación."
+      ],
+      "miradas": [
+        "Escuchar te ayudó a descubrir qué le inquieta de la consulta.",
+        "Pensar la visita juntos le dio espacio para explicar qué horario necesita."
+      ],
+      "otro": [
+        "Decidir que entrarás a la consulta",
+        "«Prefiero hablar a solas». Tomar esa decisión por él deja de lado su privacidad.",
+        "Preguntarle dónde prefiere que esperes",
+        "Acuerdan encontrarse a la salida. Puede contar contigo y hablar a solas con el personal de salud."
       ]
     }
   ],
@@ -245,11 +290,13 @@ window.CasosEducativos = {
       ],
       "respuesta": [
         "Dejar de reenviar por ahora",
-        "Preguntar por la fuente"
+        "Preguntar por la fuente",
+        "Reenviar el mensaje por si acaso"
       ],
       "fin": [
         "Parar el reenvío evita ampliar una conclusión sin respaldo. Queda abierta la pregunta por el contexto.",
-        "Pedir la fuente permite revisar las palabras originales y detectar qué añadió quien reenvió."
+        "Pedir la fuente permite revisar las palabras originales y detectar qué añadió quien reenvió.",
+        "El mensaje llega a más personas como si estuviera comprobado. Antes de compartirlo, conviene averiguar quién lo dijo y en qué contexto."
       ]
     },
     {
@@ -268,11 +315,13 @@ window.CasosEducativos = {
       ],
       "respuesta": [
         "Pedir tiempo",
-        "Acompañar a preguntar"
+        "Acompañar a preguntar",
+        "Dar la promesa por cierta"
       ],
       "fin": [
         "Pedir tiempo corta la presión del momento. La decisión sigue en manos de la persona.",
-        "Ofrecer compañía para consultar en salud permite contrastar la promesa y preguntar sin quedar en evidencia frente al grupo."
+        "Ofrecer compañía para consultar en salud permite contrastar la promesa y preguntar sin quedar en evidencia frente al grupo.",
+        "La experiencia de una persona no permite saber cómo le irá a otra. Una respuesta más cuidadosa es darse tiempo para preguntar antes de decidir."
       ]
     },
     {
@@ -291,11 +340,13 @@ window.CasosEducativos = {
       ],
       "respuesta": [
         "Acompañar a urgencias",
-        "Pedir ayuda para llegar"
+        "Pedir ayuda para llegar",
+        "Esperar a que se le pase"
       ],
       "fin": [
         "Acompañarla y contar al personal lo que se sabe facilita la atención. No hace falta averiguar todo antes de pedir ayuda.",
-        "Pedir ayuda para acceder a urgencias evita que el traslado dependa de una sola persona. Esperar una certeza puede retrasar la atención."
+        "Pedir ayuda para acceder a urgencias evita que el traslado dependa de una sola persona. Esperar una certeza puede retrasar la atención.",
+        "Esperar podría retrasar la atención de una posible intoxicación. En esta situación conviene buscar urgencias ahora y pedir compañía para llegar."
       ]
     }
   ]
