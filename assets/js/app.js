@@ -11,7 +11,7 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   let origin = null, currentScene = 'bosque', currentConcept = null, paused = reduced.matches;
   const scenes = {
-    bosque: {image:'sierra-nevada-taggen.jpg',title:'Entre bosque y montaña',number:'01 / 03',alt:'Bosque y cumbres de la Sierra Nevada de Santa Marta, fotografía de Taggen',points:[['preocupacion','Neblina',25,36,'niebla'],['tristeza-profunda','Noche y pensamiento',73,24,'noche'],['rabia','Fuego y rabia',70,65,'fuego'],['firmeza','Tierra y firmeza',26,72,'tierra']]},
+    bosque: {image:'sierra-nevada-taggen.jpg',title:'Entre bosque y montaña',number:'01 / 03',alt:'Bosque y cumbres de la Sierra Nevada de Santa Marta, fotografía de Taggen',points:[['preocupacion','Neblina',25,36,'niebla'],['tristeza-profunda','Tejido y pensamiento',73,24,'noche'],['rabia','Fuego y rabia',70,65,'fuego'],['firmeza','Tierra y firmeza',26,72,'tierra']]},
     flores: {image:'bosque-neblina.jpg',title:'Plantas, flores y viento',number:'02 / 03',alt:'Bosque entre neblina, fondo ilustrativo para explorar plantas y viento',points:[['calma','Flores y frescura',24,39,'manzanilla'],['esperanza','Árboles y alivio',73,59,'arbol'],['alegria','Alegría',27,73,'palabra'],['nikuma','Cuidar en relación',73,22,'viento']]},
     rio: {image:'rio-bosque.jpg',title:'La palabra y los vínculos',number:'03 / 03',alt:'Un río discurre entre árboles y rocas; fotografía de naturaleza ilustrativa',points:[['tristeza-perdida','Ante una pérdida',27,31,'agua'],['celos','Celos',73,48,'palabra'],['chismes','La palabra',29,72,'palabra']]}
   };
@@ -56,7 +56,7 @@
     info.points.forEach(([conceptId,label,x,y,visual])=>{
       const b=node('button','','landmark element-'+visual); b.type='button';
       b.style.setProperty('--x',`${x}%`);b.style.setProperty('--y',`${y}%`);
-      b.dataset.concept=conceptId;b.setAttribute('aria-controls',conceptId==='nikuma'?'eje2':'panel-detalle');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label',`Explorar ${label}`);
+      b.dataset.concept=conceptId;b.setAttribute('aria-controls','panel-detalle');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label',`Explorar ${label}`);
       const figure=node('img','','landmark-figure');figure.src=mini(data.conceptos.find(c=>c.id===conceptId)?.imagen || 'estudios/viento.webp');figure.alt='';figure.width=172;figure.height=132;
       b.append(figure,node('span',label,'landmark-label'));b.addEventListener('click',()=>openConcept(conceptId,b));wrap.append(b);
     });
@@ -81,8 +81,8 @@
   }
   function cerrarActividad(axis){closePanel(false);setMode(false);const url=new URL(location.href);url.hash='';history.replaceState(null,'',url);setEje(String(axis));const target=document.querySelector(`[data-experience="${axis}"]`);if(target){target.setAttribute('tabindex','-1');target.scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});target.focus({preventScroll:true});}}
   function openConcept(id,trigger) {
-    if(id==='nikuma'){setEje('2',true);return;}
-    const c=data.conceptos.find(c=>c.id===id);if(!c)return;
+    const relatedCare=id==='nikuma';
+    const c=relatedCare?{nombre:'Cuidar en relación',eje:2,tipo:'Vínculos',categoria:'Bienestar y autocuidado',escena:'flores',visual:'viento'}:data.conceptos.find(c=>c.id===id);if(!c)return;
     if(currentConcept===id && trigger?.classList.contains('landmark')){closePanel();return;}
     const fromIndex = trigger?.classList.contains('concept-row');
     const compactMap=!fromIndex && window.matchMedia('(max-width:649px)').matches && typeof catalogSheet.showModal==='function';
@@ -99,11 +99,17 @@
     $('#pd-eyebrow').textContent=`Eje ${c.eje} · ${c.tipo}`;$('#pd-titulo').textContent=c.nombre;
     $('#pd-kogui').textContent=c.termino_documental && c.id!=='tristeza-profunda' ? c.categoria+' · '+c.termino_documental : c.categoria;
     const tabs=$('#pd-tabs');tabs.replaceChildren();
-    [['significado','Comprender'],['situacion','En lo cotidiano'],['cuidado','Cuidar']].forEach(([key,label],i)=>{
+    tabs.hidden=relatedCare;
+    if(!relatedCare) [['significado','Comprender'],['situacion','En lo cotidiano'],['cuidado','Cuidar']].forEach(([key,label],i)=>{
       const b=node('button',label,'pd-tab');b.type='button';b.setAttribute('aria-pressed',String(i===0));
       b.addEventListener('click',()=>{[...tabs.children].forEach(t=>t.setAttribute('aria-pressed',String(t===b)));renderReading(c,key);});tabs.append(b);
     });
-    renderReading(c,'significado');panel.hidden=false;panel.classList.add('abierto');panel.scrollTop=0;
+    if(relatedCare){
+      const action=node('button','Ir al eje 2 · Cuidar','play-primary');
+      action.type='button';action.addEventListener('click',()=>setEje('2',true));
+      $('#pd-cuerpo').replaceChildren(node('p','El cuidado también se comparte. Escuchar a alguien o ayudarle con una tarea puede hacerle más llevadero el día.'),action);
+    }else renderReading(c,'significado');
+    panel.hidden=false;panel.classList.add('abierto');panel.scrollTop=0;
     if(fromIndex || compactMap){
       if(panel.parentElement === catalogSheet && !catalogSheet.open){
         document.documentElement.classList.add('leyendo-catalogo');
@@ -127,6 +133,21 @@
       const arrow=node('span','↗','row-arrow');arrow.setAttribute('aria-hidden','true');b.append(sketch,copy,arrow);
       b.addEventListener('click',()=>openConcept(c.id,b));wrap.append(b);
     });
+    const term=query.trim().toLocaleLowerCase('es');
+    if(!category && ['cuidar en relación','cuidar en relacion','ñikuma','nikuma','ñi','principio del agua','convivir desde el principio del agua'].includes(term)){
+      const link=node('button','Ñikuma · Ir al eje Cuidar','text-link');
+      link.type='button';
+      link.addEventListener('click',()=>{
+        setMode(false);setEje('2',true);
+        $('#lectura-nikuma').parentElement.open=true;
+        $('#lectura-nikuma').focus();
+      });
+      wrap.append(link);
+      $('#resultados').textContent='Una lectura en el eje Cuidar';
+      $('#sin-resultados').hidden=true;
+      $('#busqueda-apoyo').hidden=true;
+      return;
+    }
     $('#busqueda-apoyo').hidden=!matches.some(({concepto})=>concepto.id==='acompanamiento')||!query.trim();
     $('#sin-resultados').hidden=matches.length>0;
     $('#ampliar-busqueda').textContent=category?'Quitar el filtro de tema':'Ver las veinte lecturas';
@@ -149,6 +170,16 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){e.preventDefault();closePanel();}});
   all('[data-scene]').forEach(b=>b.addEventListener('click',()=>changeScene(b.dataset.scene)));
   all('[data-eje]').forEach(b=>b.addEventListener('click',()=>setEje(b.dataset.eje,true)));
+  all('.eje-content').forEach(section=>{
+    const back=node('button','↑ Volver a los ejes','return-to-axes text-link');
+    back.type='button';
+    back.addEventListener('click',()=>{
+      const active=$('[data-eje][aria-pressed="true"]');
+      active.scrollIntoView({block:'center',behavior:'instant'});
+      active.focus({preventScroll:true});
+    });
+    section.append(back);
+  });
   $('#buscar').addEventListener('input',e=>renderIndex(e.target.value));
   for(const category of new Set(data.conceptos.map(c=>c.categoria))){
     const option=node('option',category);option.value=category;$('#categoria').append(option);

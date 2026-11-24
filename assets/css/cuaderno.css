@@ -82,7 +82,11 @@ button,a,input,select,summary{touch-action:manipulation}
 .site-bar{position:sticky;top:0;z-index:300;background:#e9dfcc}.site-bar .app-header{position:static}
 .hdr-txt{min-width:0}.hdr-txt p{white-space:normal}.reading-toolbar{display:flex;justify-content:flex-end;position:sticky;top:0;z-index:4;background:#efe4ce;padding:3px 0}
 :is(#lectura-catalogo,.territorio,.conceptos-index) .reading-toolbar .pd-cierre{position:static;float:none;margin:0;width:auto;height:44px;padding:0 13px;font-size:14px}
-.panel-detalle,.pd-cuerpo{cursor:default;caret-color:transparent}.search-fields input{caret-color:auto}
+/* El texto de lectura conserva la selección y la copia con el ratón. */
+body { caret-color: transparent; }
+main :where(p, h1, h2, h3, h4, blockquote, figcaption) { cursor: default; }
+input, textarea, [contenteditable="true"] { caret-color: auto; }
+input[type="search"], textarea { cursor: text; }
 @media(min-width:900px){
  .site-bar{display:grid;grid-template-columns:34px minmax(145px,1fr) minmax(335px,1.5fr) minmax(112px,.65fr);align-items:center;gap:12px;padding:8px max(22px,calc((100% - 1200px)/2));border-bottom:1px solid var(--line)}
  .site-bar .app-header{display:contents}.site-bar .hdr-marca{grid-column:1;grid-row:1}.site-bar .hdr-txt{grid-column:2;grid-row:1}.site-bar .help-launch{grid-column:4;grid-row:1}
@@ -124,3 +128,10 @@ button,a,input,select,summary{touch-action:manipulation}
 .walk-tools,#walk-choices{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sendero button{min-height:44px;padding:8px 14px;border-radius:14px;border:1px solid #859175;color:#274234;background:#efe4cb}.sendero button[data-step]{font-size:21px;min-width:46px}.sendero button:disabled{opacity:.48}
 #walk-music[aria-pressed=true],#walk-choices button{background:#365640;color:#fff3da}.walk-dialog{margin:15px 0 0;padding:12px 14px;border-inline-start:3px solid #778659;max-width:64ch;background:#e4e3cf}
 @media(prefers-reduced-motion:reduce){.walk-player,.walk-friend{transition:none}}
+
+.return-to-axes { display:block; margin:1rem 0; min-height:44px; }
+
+.nikuma-story {grid-template-columns:minmax(90px,172px) minmax(0,1fr);gap:clamp(16px,3vw,32px)}
+.nikuma-story > img {width:100%;height:auto;padding:0;background:transparent;object-fit:contain;mix-blend-mode:multiply;border-radius:0}
+@media(max-width:540px){.nikuma-story{display:flow-root}.nikuma-story > img{float:right;width:clamp(86px,25vw,124px);margin:0 0 8px 12px}}
+.walk-echo{position:absolute;top:25%;right:6%;max-width:65%;padding:6px 12px;background:#f7edd9;border-radius:12px 12px 0 12px;color:#304533;font-size:.95rem}

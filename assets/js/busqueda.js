@@ -116,31 +116,39 @@
   }
   // Expresiones de conversación agrupadas por lo que la lectura permite explorar.
   const everyday={
-    acompanamiento:'no me siento bien|no estoy bien|no me encuentro bien|no me he sentido bien|no ando bien|ando mal|la estoy pasando mal|estoy pasando por un mal momento|necesito a alguien a mi lado|no sé qué me pasa|algo me pasa|no quiero estar solo ahora|quiero pedir ayuda y me da pena',
-    escucha:'necesito desahogarme|quisiera contar lo que me pasa|no me dejan terminar de hablar|quiero que alguien me oiga|me hace falta hablar|solo necesito que me escuches',
-    calma:'no logro bajar el ritmo|siento que todo me supera|tengo demasiado encima|estoy al límite|necesito parar un momento|quiero calmar los nervios|necesito tomar aire',
-    preocupacion:'y si algo sale mal|mi cabeza no para|no paro de pensar en eso|me da vueltas la cabeza de tanto pensar|me inquieta lo que pueda pasar|estoy hecho un lío|todo me preocupa',
-    'tristeza-profunda':'ando sin ánimo|me levanté sin ganas|todo me da igual|se me salen las lágrimas|he perdido el ánimo|estoy de bajón',
-    'tristeza-perdida':'me hace falta alguien que murió|extraño su compañía|perdí a una persona querida|me duele su ausencia',
-    rabia:'ando de mal genio|me hierve la sangre|me dio mucha rabia|me dio piedra|estoy que reviento|tengo un enojo',
-    nusa:'me gritan y me insultan|me están amenazando|me golpearon|tengo miedo de que me peguen',
-    dialogo:'discutí con mi papá|no logramos ponernos de acuerdo|cómo le explico a mi familia|en casa no hablamos|quiero arreglar un malentendido',
-    aislamiento:'siento que nadie me busca|hace rato que no veo a nadie|me fui apartando|me siento por fuera del grupo|me dejaron de invitar',
-    firmeza:'quiero mantener mi respuesta|cómo pongo límites|no respetan mis límites|quiero decir basta',
-    esperanza:'empiezo a ver una salida|volví a ilusionarme|algo me anima a seguir',
-    alegria:'hoy me fue bien|quiero compartir una buena noticia|estoy de buenas|me alegra volver a verte',
-    celos:'me preocupa que me cambien por alguien|siento celos de su amistad|quiero mirar sus chats',
-    criticas:'todo lo que hago lo critican|me hablaron feo|se ríen de lo que hago',
-    chismes:'se inventaron cosas sobre mí|están hablando a mis espaldas|contaron algo falso',
-    consejo:'necesito otra opinión|quiero consultar una decisión|no sé a quién preguntarle',
-    suenos:'llevo noches sin descansar|no logro pegar el ojo|me desvelo pensando|me despierto a cada rato',
-    presion:'ya dije que no y siguen|me da pena decir que no al grupo|quieren que pruebe aunque no quiero',
-    informacion:'qué riesgos tiene consumir|me ofrecieron una droga|dicen que es seguro para todos|qué puede hacer una sustancia'
+    acompanamiento:'necesito que alguien esté conmigo|no sé a quién recurrir|quisiera que vinieras conmigo|no puedo con esto a solas|cómo acompaño a mi amigo|mi amigo está pasando un mal rato|no me siento bien|no estoy bien|no me encuentro bien|no me he sentido bien|no ando bien|ando mal|la estoy pasando mal|estoy pasando por un mal momento|necesito a alguien a mi lado|no sé qué me pasa|algo me pasa|no quiero estar solo ahora|quiero pedir ayuda y me da pena',
+    escucha:'quiero hablar sin que me interrumpan|cómo escucho a mi amigo|necesito sacar lo que llevo dentro|solo quiero que me oigan|necesito desahogarme|quisiera contar lo que me pasa|no me dejan terminar de hablar|quiero que alguien me oiga|me hace falta hablar|solo necesito que me escuches',
+    calma:'quiero bajar la tensión|cómo me calmo antes de responder|me cuesta recuperar la calma|necesito un respiro|quiero pensar antes de contestar|no logro bajar el ritmo|siento que todo me supera|tengo demasiado encima|estoy al límite|necesito parar un momento|quiero calmar los nervios|necesito tomar aire',
+    preocupacion:'pienso siempre en lo peor|me angustia lo que pueda pasar|tengo la mente dando vueltas|no sé qué va a pasar|tengo un enredo en la cabeza|y si algo sale mal|mi cabeza no para|no paro de pensar en eso|me da vueltas la cabeza de tanto pensar|me inquieta lo que pueda pasar|estoy hecho un lío|todo me preocupa',
+    'tristeza-profunda':'se me quitó el ánimo|ya nada me entusiasma|me cuesta levantarme de puro desánimo|perdí las ganas de salir|quiero llorar sin saber por qué|ando sin ánimo|me levanté sin ganas|todo me da igual|se me salen las lágrimas|he perdido el ánimo|estoy de bajón',
+    'tristeza-perdida':'ya no está con nosotros|me cuesta despedirme|perdí a un ser querido|extraño a quien falleció|me duele que ya no esté|me hace falta alguien que murió|extraño su compañía|perdí a una persona querida|me duele su ausencia',
+    rabia:'perdí la paciencia|se me subió la rabia|me sacaron de quicio|me dieron ganas de gritar|me dio mal genio|ando de mal genio|me hierve la sangre|me dio mucha rabia|me dio piedra|estoy que reviento|tengo un enojo',
+    nusa:'me empujó durante la pelea|me gritó y me amenazó|me da miedo que me golpee|me lastimó cuando discutimos|me gritan y me insultan|me están amenazando|me golpearon|tengo miedo de que me peguen',
+    dialogo:'siempre terminamos discutiendo|cómo resolvemos esta pelea|tenemos opiniones distintas|quiero hacer las paces|hablar después de una discusión|discutí con mi papá|no logramos ponernos de acuerdo|cómo le explico a mi familia|en casa no hablamos|quiero arreglar un malentendido',
+    aislamiento:'me siento apartado del grupo|ya no salgo con nadie|me dejaron por fuera|cada vez hablo con menos gente|siento que nadie me busca|hace rato que no veo a nadie|me fui apartando|me siento por fuera del grupo|me dejaron de invitar',
+    firmeza:'ya decidí y quiero mantenerlo|hasta aquí quiero llegar|quiero que respeten mi no|cómo digo hasta aquí|quiero mantener mi respuesta|cómo pongo límites|no respetan mis límites|quiero decir basta',
+    esperanza:'empiezo a sentir alivio|recuperé la ilusión|vuelvo a tener ganas de intentarlo|parece que hay una salida|empiezo a ver una salida|volví a ilusionarme|algo me anima a seguir',
+    alegria:'me salió algo bien|qué gusto volver a vernos|tengo algo bueno que contar|estoy de buen ánimo|hoy me fue bien|quiero compartir una buena noticia|estoy de buenas|me alegra volver a verte',
+    celos:'me da celos que salga con otra persona|desconfío de mi pareja|me comparo con su otra amistad|me dan ganas de revisar su teléfono|me preocupa que me cambien por alguien|siento celos de su amistad|quiero mirar sus chats',
+    criticas:'se ríen de mis errores|todo me lo echan en cara|cómo decir que algo me molestó sin ofender|me hicieron un comentario hiriente|todo lo que hago lo critican|me hablaron feo|se ríen de lo que hago',
+    chismes:'andan hablando de mí|están contando algo que no pasó|se regó un cuento sobre mí|me llegó un rumor|se inventaron cosas sobre mí|están hablando a mis espaldas|contaron algo falso',
+    consejo:'quisiera saber qué opinas|tengo dos opciones y dudo|a quién le pregunto qué hacer|necesito otra mirada|necesito otra opinión|quiero consultar una decisión|no sé a quién preguntarle',
+    suenos:'paso la noche en vela|me despierto de madrugada|tuve un sueño que me inquieta|no pegué ojo anoche|llevo noches sin descansar|no logro pegar el ojo|me desvelo pensando|me despierto a cada rato',
+    presion:'todos quieren que lo pruebe|me dicen que pruebe para encajar|me da miedo quedar mal con el grupo|me insisten en que acepte|ya dije que no y siguen|me da pena decir que no al grupo|quieren que pruebe aunque no quiero',
+    informacion:'cómo sé si es cierto lo que dicen de una droga|me ofrecieron un vapeador|qué efectos tiene el cannabis|qué es la nicotina|riesgos de los inhalantes|dudas sobre la cocaína|qué efectos tiene el alcohol|qué riesgos tiene consumir|me ofrecieron una droga|dicen que es seguro para todos|qué puede hacer una sustancia'
   };
   const rules=signals.map(([id,reason,cues])=>[id,reason,cues+'|'+everyday[id]]).flatMap(([id,reason,cues])=>cues.split('|').map(cue=>({id,reason,tokens:words(cue)})));
   // Dos indicios cercanos permiten reconocer una situación con palabras entre ellos.
   // Cada pareja describe algo que realmente se explora en la lectura indicada.
   const contexts=[
+    ['celos','revisarle|espiarle','mensajes|chats|celular'],
+    ['escucha','contarlo|hablarlo','escuche|escucharme'],
+    ['preocupacion','imagino|anticipo','peor|problemas'],
+    ['suenos','despierto|despertando','madrugada|sobresalto'],
+    ['chismes','circula|corre|difunden','cuento|rumor|mentira'],
+    ['presion','insisten|presionan','fume|vapee|tome'],
+    ['esperanza','recuperando|recobré','ilusión|esperanza'],
+    ['informacion','efectos|riesgos|dudas','cannabis|nicotina|inhalantes|cocaína|alcohol|vapeadores'],
     ['dialogo','papá|mamá|hermano|hermana|familia','conversar|hablar|escucharme|entenderme'],
     ['escucha','necesito|quisiera|quiero','oigan|escuchen|desahogarme'],
     ['suenos','cuesta|logro|difícil|dificultad|problemas','dormirme|dormir|descansar|conciliar'],
@@ -165,6 +173,13 @@
       query.some((other,j)=>right.has(other)&&Math.abs(i-j)<=6));
   }
   const wide={
+    'me pasa algo':['acompanamiento','escucha'],'estoy pasando un mal rato':['acompanamiento','calma'],
+    'necesito hablar':['escucha','acompanamiento'],'con quien hablo':['acompanamiento','escucha'],
+    'me cuesta explicarlo':['escucha','consejo'],'por donde empiezo':['consejo','acompanamiento'],
+    'tejido y pensamiento':['tristeza-profunda'],'ante una perdida':['tristeza-perdida'],
+    'tierra y firmeza':['firmeza'],'la palabra':['chismes'],'fuego y rabia':['rabia'],
+    'nicotina':['informacion'],'cannabis':['informacion'],'inhalantes':['informacion'],'cocaina':['informacion'],'alcohol':['informacion'],
+
     'me siento':['preocupacion','calma'],'no puedo':['calma','acompanamiento'],'no se':['acompanamiento','consejo'],'no se que':['acompanamiento','consejo'],'no se que hacer':['acompanamiento','consejo'],
     'que hago':['acompanamiento','consejo'],'no se por donde empezar':['acompanamiento','consejo'],
     'no tengo claro por donde empezar':['acompanamiento','consejo'],'ayuda':['acompanamiento','escucha'],

@@ -115,7 +115,12 @@
   function move(id,to){const from=order.indexOf(id),target=typeof to==='number'?to:order.indexOf(to);if(target<0||target>=order.length||from===target)return;order.splice(from,1);order.splice(target,0,id);board.removeAttribute('data-connected');draw();board.querySelector('[data-drop="'+id+'"]').after(state);describeOrder();}
   function describeOrder(){state.textContent=c.efecto[ids.indexOf(order[0])]+' '+c.final[ids.indexOf(order[2])];}
   function draw(){board.after(state);board.replaceChildren();order.forEach((id,i)=>{const row=el('div','','sequence-piece');row.dataset.drop=id;const handle=button(`${i+1}. ${names[id]}`,()=>{if(i>0){move(id,0);board.querySelector('.sequence-handle').focus({preventScroll:true});}else{row.after(state);describeOrder();}},'sequence-handle');draggable(handle,to=>move(id,to));row.append(handle,button('Subir',()=>{move(id,i-1);board.querySelectorAll('.sequence-piece')[Math.max(0,i-1)].querySelector('button').focus({preventScroll:true});}),button('Bajar',()=>{move(id,i+1);board.querySelectorAll('.sequence-piece')[Math.min(2,i+1)].querySelector('button').focus({preventScroll:true});}));row.children[1].disabled=i===0;row.children[2].classList.add('move-down');row.children[2].disabled=i===2;board.append(row);});}
-  controls.append(button('Recorrer mi secuencia',()=>{board.dataset.connected='true';controls.after(state);describeOrder();},'play-primary'),button('Reiniciar piezas',()=>{order=['acordar','observar','escuchar'];board.removeAttribute('data-connected');draw();state.textContent='Prueba otra organización.';}));
+  controls.append(button('Recorrer mi secuencia',()=>{board.dataset.connected='true';controls.after(state);state.replaceChildren();
+    const moments=[['Al empezar',c.efecto],['En medio',c.puente],['Al cerrar',c.final]];
+    moments.forEach(([label,effects],i)=>{
+      const line=el('p');line.append(el('strong',label+' · '),effects[ids.indexOf(order[i])]);state.append(line);
+    });
+  },'play-primary'),button('Reiniciar piezas',()=>{order=['acordar','observar','escuchar'];board.removeAttribute('data-connected');draw();state.textContent='Prueba otra organización.';}));
   draw();
  });
  activity(3,'Un mensaje, varios caminos','Elige cómo abrir la conversación. Puedes volver una decisión y descubrir qué cambia.',({box,board,state,controls},c)=>{

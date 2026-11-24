@@ -6,14 +6,15 @@
   const friend=game.querySelector('.walk-friend'),text=game.querySelector('#walk-text');
   const choices=game.querySelector('#walk-choices'),meet=game.querySelector('#walk-meet');
   const steps=[...game.querySelectorAll('[data-step]')],music=game.querySelector('#walk-music');
+  const echo=document.createElement('span');echo.className='walk-echo';scene.append(echo);
   const routes=[
-    {first:'Preguntarle si quiere compañía',reply:'«Sí, pero ahora prefiero no hablar de lo que pasó». Se quedan un rato mirando el camino.',later:'Al verte otra vez, se acerca. «Me gustó que te quedaras. Creo que ya puedo hablar».',ends:[
+    {place:48,greeting:'«Qué bueno verte de nuevo».',first:'Preguntarle si quiere compañía',reply:'«Sí, pero ahora prefiero no hablar de lo que pasó». Se quedan un rato mirando el camino.',later:'Al verte otra vez, se acerca. «Me gustó que te quedaras. Creo que ya puedo hablar».',ends:[
       ['Escuchar antes de aconsejar','Te cuenta qué le dolió. Haber respetado el silencio por la mañana le permitió elegir cuándo hablar.'],
       ['Preguntar qué le ayudaría ahora','Prefiere que lo acompañes a conversar con la otra persona. La ayuda que quería por la mañana cambió durante el día.']]},
-    {first:'Ofrecer ayuda con la tarea pendiente',reply:'«Me serviría que me ayudaras a recoger». Acuerdan quién se encarga de cada cosa.',later:'Por la tarde la tarea ya está hecha. «Gracias por la mano. Lo de la discusión todavía me da vueltas».',ends:[
+    {place:65,greeting:'«Ya terminamos la tarea».',first:'Ofrecer ayuda con la tarea pendiente',reply:'«Me serviría que me ayudaras a recoger». Acuerdan quién se encarga de cada cosa.',later:'Por la tarde la tarea ya está hecha. «Gracias por la mano. Lo de la discusión todavía me da vueltas».',ends:[
       ['Invitarlo a caminar y conversar','Acepta caminar contigo. Resolver la tarea le quitó una carga, y ahora hay espacio para escuchar lo que todavía le preocupa.'],
       ['Preguntar a quién quisiera acercarse','Piensa en una persona de confianza y te pide que vayas con él. Él eligió con quién hablar y tú facilitaste el encuentro.']]},
-    {first:'Acordar verse por la tarde',reply:'«Ahora necesito un rato a solas. Nos vemos más tarde junto al camino». Eligen un lugar para encontrarse.',later:'Te está esperando donde quedaron. «Pensé que se te iba a olvidar». Haber vuelto le muestra que puede contar contigo.',ends:[
+    {place:81,greeting:'«Aquí, donde quedamos».',first:'Acordar verse por la tarde',reply:'«Ahora necesito un rato a solas. Nos vemos más tarde junto al camino». Eligen un lugar para encontrarse.',later:'Te está esperando donde quedaron. «Pensé que se te iba a olvidar». Haber vuelto le muestra que puede contar contigo.',ends:[
       ['Preguntarle cómo ha pasado el día','Cuenta que sigue molesto. La cita sirvió para abrir una conversación incluso cuando lo que siente todavía no ha cambiado.'],
       ['Proponer sentarse juntos un rato','Se sientan. Cumplir el acuerdo también es una forma de acompañar, aunque esta vez hablen de otras cosas.']]}
   ];
@@ -28,7 +29,8 @@
     items.forEach(([label,act])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>{act();const next=choices.querySelector('button')||meet;next.focus({preventScroll:true});};choices.append(b);});
   }
   function travel(late){
-    afternoon=late;phase='walk';target=late?81:34;x=late?34:9;
+    afternoon=late;phase='walk';target=late?route.place:34;x=late?34:9;
+    echo.hidden=!late;echo.textContent=late?route.greeting:'';
     scene.classList.toggle('late',late);scene.querySelector('.walk-time').textContent=late?'Por la tarde':'Por la mañana';
     place(player,x);place(friend,target);options([]);controls();
     text.textContent=late?'Tu amigo está más adelante. Acércate para volver a verlo.':'Tu amigo espera en el sendero. Usa las flechas para caminar o elige «Ir al encuentro».';
@@ -41,7 +43,7 @@
       options(routes.map(r=>[r.first,()=>{route=r;text.textContent=r.reply;options([['Seguir hasta la tarde',()=>travel(true)]]);}]));
     }else{
       text.textContent=route.later;
-      options(route.ends.map(([label,end])=>[label,()=>{text.textContent=end;phase='end';options([['Explorar otro camino',()=>travel(false)]]);}]));
+      options(route.ends.map(([label,end])=>[label,()=>{text.textContent=end;phase='end';options([['Volver a la mañana',()=>travel(false)],['Probar otra respuesta de la tarde',()=>{phase='walk';arrive();}]]);}]));
     }
     choices.firstElementChild?.focus({preventScroll:true});
   }
