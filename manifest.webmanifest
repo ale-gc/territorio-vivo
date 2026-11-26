@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "Territorio vivo",
+  "short_name": "Territorio vivo",
+  "lang": "es-CO",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eae1cf",
+  "theme_color": "#29493a",
+  "icons": [
+    {"src":"assets/img/pwa-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"assets/img/pwa-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

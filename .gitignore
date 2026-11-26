@@ -64,3 +64,12 @@
 !/assets/img/estudios/concha-gris.jpg
 !/assets/img/estudios/rostro-celos.jpg
 !/assets/img/estudios/viento-palabra.jpg
+
+!/sw.js
+!/pwa-recursos.js
+!/manifest.webmanifest
+!/assets/css/dispositivo.css
+!/assets/js/dispositivo.js
+!/assets/img/pwa-180.png
+!/assets/img/pwa-192.png
+!/assets/img/pwa-512.png
