@@ -1,14 +1,14 @@
 // Generado por tools/preparar-pwa.py
 self.TV_BUNDLE = {
-  "version": "19bf32ac498fab0f46e51f1e",
-  "bytes": 2171727,
+  "version": "8cf0b42dbbd011f21b401f18",
+  "bytes": 2173904,
   "files": {
-    "acerca.html": "f806ba7ce810dbb9ddcc1efb47332b2ff8d888f3b5f316dbe673e3c8f5ced10e",
-    "apoyo.html": "8662120ccf4fbca3af202cd8e3c32c95bd4423ac3784c480b641c8f03c60862e",
-    "aprender.html": "037d0d9822029f7280293ec9e253c1ef350ceaad1b1624bdf8b4558bfa631c19",
+    "acerca.html": "cca163891db7e95009622f89f9ccc39f706ce6e59d5b72947ec72bd708d26279",
+    "apoyo.html": "1dddc06924ccd3badc340344d82e47917c62c045e5b601d0b52d0000c5b199d9",
+    "aprender.html": "368ea1f874c20379118c99d831a32845643dc050ad7ec2e17d45b15d732943fc",
     "assets/css/aprendizaje.css": "697ed1ef7490fb6c2e242852fc7fc3419304df172e39cfc59e81025f069a8b58",
     "assets/css/cuaderno.css": "b2ae5e1d5e69077ee3fee0e44cfe62967f29aa9dd113625e4f99a854e743a251",
-    "assets/css/dispositivo.css": "87532207d0c4bc1ba58bf76d9c125e2ac5564a0a98158ff2fbb05361595b050c",
+    "assets/css/dispositivo.css": "b5f7c4fd11414065bfb031e9dda8ac6fca0c4fbb60e179ee5f2ff7497443e513",
     "assets/css/experiencia.css": "e41f7a09bff825973bd8513413c8ee8fb4bde47e955427879e31333dff179c7e",
     "assets/css/participacion.css": "0f8c812ac0a809ac2bc7fc335780e79a8aad2c24fc801f8ce0536abd07874dbf",
     "assets/css/styles.css": "c9d6f374f4887d033bab22fcbf5ecc0e4dab8ea8216f786cebdaa4d886d4decd",
@@ -56,14 +56,14 @@ self.TV_BUNDLE = {
     "assets/img/recorrido-cuidado.svg": "e3fe4e4a73f93c274f5cbc976a9a884b5520cd8969a8a0703747a363d46d5f8c",
     "assets/img/rio-bosque.jpg": "c521f4a3b8bef17d127283b42105b239c6f70dddd98f972d015bd7d0e90fbdf6",
     "assets/img/sierra-nevada-taggen.jpg": "1a986b1192351a99fcce246ccee40c1ebcc0d6c54046b7e14c53993b3faf1c16",
-    "assets/js/app.js": "c7a7daa7ea7de77fa799edcf3215abb61404c9a119438f4384a956b29e493cf5",
+    "assets/js/app.js": "c642255ba2480b61b03b503562e93963f222697ec127aef3480426b2a9073de6",
     "assets/js/busqueda.js": "9571fd056179b346548c8005a9514be8d2ce4a55b2d1b652cd8f191a3f9f5ba1",
-    "assets/js/dispositivo.js": "00da16c10f7e437881870b6f676f53823d221d55773f26488901dbf4a7b33406",
+    "assets/js/dispositivo.js": "173f7d122832c8da79185d3821dcee5b7b07d1c509f5a41aecbd22ded8109579",
     "assets/js/experiencias.js": "d120bde2b01f05a315ca93199790fefa66539b5badf043d10ed96ade1a2cd651",
     "assets/js/miniaturas.js": "76ba48d8e3dfafaa1e7006b5c79da28063cd1b2d64325083d8b87bb710098fde",
     "assets/js/presentacion.js": "0ead60f33519244231c79bd0c26d1349780bde2adbb11bc92b7062c4a54de1d0",
     "assets/js/sendero.js": "26c34dd5915129a291f9d4de66b8467b7406b2a4247ff15c029fd4a9662ebfe9",
-    "index.html": "dab78ce52b10769eeb83ab72311eedbaeb8a85d7e74ffde153517716feda66c2",
+    "index.html": "abd580bb51301f64bc13110549c3ab57f3e8367d5dd35b2dfecbc8a8d4814703",
     "manifest.webmanifest": "a6b89215280c1fa91892dc1380f20c31b5050cabc267629731d9aa742ac4ae02"
   }
 };

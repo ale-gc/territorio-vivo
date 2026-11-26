@@ -12,6 +12,7 @@
         <progress id="tv-progreso" aria-label="Recursos guardados" hidden></progress>
         <button type="button" id="tv-guardar" hidden>Guardar en este dispositivo</button>
         <button type="button" id="tv-despues" hidden>Ahora no</button>
+        <small>La primera descarga necesita Internet. El navegador puede borrar la copia si necesita espacio.</small>
         <p id="tv-actualizacion" role="status"></p>
       </div>
       <div><h3>Instalar Territorio vivo</h3>
@@ -30,6 +31,11 @@
     shortcut.textContent = 'Instalar o guardar sin conexión';
     invitation.append(shortcut);
   }
+  const mobileAccess = document.createElement('a');
+  mobileAccess.className = 'tv-mobile-access';
+  mobileAccess.href = '#en-tu-dispositivo';
+  mobileAccess.textContent = 'Instalar o guardar sin conexión';
+  document.querySelector('main').before(mobileAccess);
   const get = id => panel.querySelector('#tv-' + id);
   const save = get('guardar'), later = get('despues'), progress = get('progreso');
   const status = get('estado'), update = get('actualizacion');
@@ -49,6 +55,8 @@
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   instructions.querySelector('p').textContent = appleMobile
     ? 'Abre la página en Safari, pulsa Compartir y Añadir a pantalla de inicio. Si aparece «Abrir como app web», actívalo. Abre el nuevo icono con conexión para comprobar tu copia.'
+    : /Android/i.test(navigator.userAgent)
+    ? 'En Chrome, abre el menú de tres puntos y toca Instalar aplicación o Añadir a pantalla de inicio. Confirma cuando el navegador te lo pida.'
     : 'Busca la opción de instalar esta página en el menú del navegador o en la barra de direcciones. Si no aparece, puedes guardar la página en favoritos y usarla desde aquí.';
   let prompt, registration, mode;
   const supported = window.isSecureContext && location.protocol !== 'file:' && 'serviceWorker' in navigator;
@@ -96,10 +104,11 @@
       idle: deferred ? 'Puedes guardar las lecturas y actividades cuando te convenga.' : 'Guarda todas las páginas, imágenes y actividades, incluso las que aún no has abierto.',
       partial: 'Quedaron recursos por guardar. Con conexión puedes continuar la descarga.',
       progress: 'Guardando en este dispositivo…',
-      ready: 'Listo para usar sin conexión. Los enlaces externos requieren Internet.',
+      ready: 'Listo para usar sin conexión. Los enlaces externos necesitan Internet y las llamadas requieren servicio telefónico.',
       error: 'La descarga quedó pendiente. Revisa tu conexión y el espacio disponible, y vuelve a intentarlo.'
     };
-    status.textContent = messages[mode];
+    if (status.textContent !== messages[mode]) status.textContent = messages[mode];
+    progress.setAttribute('aria-valuetext', info.count + ' de ' + info.total + ' recursos');
     save.hidden = busy;
     save.disabled = ready && !navigator.onLine;
     save.textContent = ready ? 'Buscar actualizaciones' : mode === 'idle' ? 'Guardar ahora · ' + size + ' MB' : 'Reintentar descarga';

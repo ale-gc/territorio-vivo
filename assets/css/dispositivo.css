@@ -6,6 +6,12 @@
   color: #29493a;
 }
 .dispositivo h2 { font: 1.5rem Georgia, serif; margin: 0 0 1rem; }
+.tv-mobile-access { display:none; }
+.dispositivo small { display:block; line-height:1.5; }
+@media (max-width:899px) {
+  .tv-mobile-access { display:flex; align-items:center; justify-content:flex-end; min-height:44px; padding:0 5%; font-size:.91rem; color:#29493a; text-decoration:underline; }
+  .entry-invitation a[href="#en-tu-dispositivo"] { display:none; }
+}
 .dispositivo h3 { font: 600 1rem system-ui, sans-serif; margin: 0 0 .4rem; }
 .dispositivo p { font-size: .94rem; line-height: 1.5; margin: .3rem 0; }
 .dispositivo p:empty, .dispositivo [hidden] { display: none; }

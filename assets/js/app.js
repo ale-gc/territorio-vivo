@@ -42,12 +42,39 @@
     scene.removeAttribute('data-reading');
     if(restore && origin?.isConnected) origin.focus({preventScroll:true});
   }
+  // Preparar las dos fotografías secundarias después del primer dibujo del paisaje.
+  const scenePhotos = [];
+  function preparePhotos() {
+    if (scenePhotos.length) return;
+    for (const id of ['flores','rio']) {
+      const photo = new Image();
+      photo.decoding = 'async';
+      photo.src = 'assets/img/' + scenes[id].image;
+      scenePhotos.push(photo);
+      photo.decode?.().catch(() => {});
+    }
+  }
+  const firstPhoto = $('#paisaje');
+  if (typeof Image !== 'undefined') {
+    const warm = () => requestAnimationFrame(preparePhotos);
+    if (firstPhoto.complete) warm();
+    else firstPhoto.addEventListener('load', warm, {once:true});
+  }
+  let reveal;
   function changeScene(id) {
     const info=scenes[id]; if(!info)return;
     closePanel(false); currentScene=id; scene.dataset.ambiente=id;
-    $('#paisaje').onload=null;
-    $('#paisaje').src=`assets/img/${info.image}`; $('#paisaje').alt=info.alt;
-    $('#paisaje').onload=()=>{if(!paused && typeof $('#paisaje').animate==='function')$('#paisaje').animate([{opacity:.55},{opacity:1}],{duration:500,easing:'ease-out'});};
+    const photo = $('#paisaje');
+    const source = 'assets/img/' + info.image;
+    if (photo.getAttribute('src') !== source) {
+      reveal?.cancel();
+      photo.onload = () => {
+        if (!paused && !reduced.matches && photo.animate)
+          reveal = photo.animate([{opacity:.88},{opacity:1}],{duration:200,easing:'ease-out'});
+      };
+      photo.src = source;
+    }
+    photo.alt = info.alt;
     $('#scene-number').textContent=info.number; $('#scene-title').textContent=info.title;
     const credit=$('.landscape-credit');
     if(credit){credit.firstChild.textContent=id==='bosque'?'Sierra Nevada: Taggen · CC BY-SA 3.0. ':'Naturaleza ilustrativa · Pexels. ';}
