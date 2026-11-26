@@ -135,3 +135,5 @@ input[type="search"], textarea { cursor: text; }
 .nikuma-story > img {width:100%;height:auto;padding:0;background:transparent;object-fit:contain;mix-blend-mode:multiply;border-radius:0}
 @media(max-width:540px){.nikuma-story{display:flow-root}.nikuma-story > img{float:right;width:clamp(86px,25vw,124px);margin:0 0 8px 12px}}
 .walk-echo{position:absolute;top:25%;right:6%;max-width:65%;padding:6px 12px;background:#f7edd9;border-radius:12px 12px 0 12px;color:#304533;font-size:.95rem}
+
+img[src$="/estudios/intimidacion.webp"] { object-position: 50% 12%; }
